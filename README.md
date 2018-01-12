@@ -1,5 +1,6 @@
 # Awvs_Nessus_Scanner_API
 扫描器Awvs 11和Nessus 7 Api利用脚本
+需要自行配置api地址和apikey
 
       帮助信息
 ![](https://github.com/se55i0n/Awvs_Nessus_Scanner_API/blob/master/screen1.png)
