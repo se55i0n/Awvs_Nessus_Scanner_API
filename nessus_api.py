@@ -5,7 +5,9 @@
 
 import re
 import json
+import time
 import requests
+import urlparse
 import requests.packages.urllib3
 
 class nessus(object):
@@ -145,7 +147,7 @@ class nessus(object):
 				for i in range(len(text)):
 					self.task.append(text[i]['id'])
 					print self.G+'['+str(i)+']',text[i]['name']+self.W
-				task_id = raw_input(self.O+'[Nessus_Api/Set_Scan_Id]>> '+self.W)
+				task_id = raw_input(self.O+'[Nessus_Api/Set_Task_Id]>> '+self.W)
 				return self.task[int(task_id)]
 			else:
 				print self.R+'[-] Ops, 当前无扫描任务...'+self.W
@@ -222,7 +224,7 @@ class nessus(object):
 					print u'[-] 高危漏洞: {}'.format(text[i]['high'])
 					print u'[-] 中危漏洞: {}'.format(text[i]['medium'])
 					print u'[-] 低危漏洞: {}'.format(text[i]['low'])
-					print u'[-] 信息提示: {}\n'.format(text[i]['info'])+self.W
+					print u'[-] 信息提示: {}'.format(text[i]['info'])+self.W
 		except Exception as e:
 			pass
 
@@ -255,15 +257,20 @@ class nessus(object):
 			scan_id = self.check_id()
 			if scan_id:
 				r = self.request(method='POST', path='/scans/{}/export'.format(scan_id),
-				 data=json.dumps({'format':self.set_format()}))
+				 data=json.dumps({'format':self.set_format(),'chapters':'vuln_by_host'}))
 				if r.status_code == 200:
-					print self.G+'[-] OK, 生成报告成功...'+self.W
+					print self.G+'[-] 报告生成中...'+self.W
 					file_id = json.loads(r.text)['file']
+					time.sleep(5)
 					rs = self.request(method='GET', path='/scans/{}/export/{}/download'.format(
 						scan_id, file_id))
-					filename = re.findall(r'attachment; filename="(.*?)"',rs.headers['Content-Disposition'])[0]
-					with open(filename,'wb') as f:
-						f.write(rs.content)
+					if rs.status_code == 200:
+						print self.G+'[-] OK, 生成报告成功...'+self.W
+						filename = re.findall(r'attachment; filename="(.*?)"',str(rs.headers))[0]
+						with open(filename,'wb') as f:
+							f.write(rs.content)
+					else:
+						print self.R+'[-] Ops, 报告还未生成中...'+self.W
 				elif rs.status_code == 404:
 					print self.R+'[-] 扫描任务不存在...'+self.W
 		except Exception as e:
