@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 #coding:utf-8
 #Author:se55i0n
-#AWVS API扫描脚本
+#Awvs 11 API利用脚本
 
+import sys
 import json
 import time
 import requests
@@ -94,7 +95,7 @@ class awvs(object):
 			if r.status_code == 201:
 				return json.loads(r.text)['target_id']
 		except Exception as e:
-			pass
+			print e
 
 	def scan(self):
 		#启动扫描任务
@@ -187,7 +188,7 @@ class awvs(object):
 		try:
 			self.banner()
 			self.usage()
-			print '-'*48
+			print '-'*43
 			while True:
 				show = raw_input(self.O+'[Awvs_Api]>> '+self.W)
 				if show == 'view':
@@ -232,7 +233,7 @@ class awvs(object):
                                /_/'''
 		
 		print self.O+flag+self.W+'\n'
-		print '-'*48
+		print '-'*43
 
 if __name__ == '__main__':
 	mywvs = awvs()
