@@ -3,7 +3,6 @@
 #Author:se55i0n
 #Awvs 11 API利用脚本
 
-import sys
 import json
 import time
 import requests
