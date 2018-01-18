@@ -84,6 +84,9 @@ class awvs(object):
 				return
 		except Exception as e:
 			print self.R+'[-] Ops, 输入有误...'+self.W
+		finally:
+			#清空获取的任务列表
+			del self.task[:]
 
 	def add(self):
 		#添加扫描对象
