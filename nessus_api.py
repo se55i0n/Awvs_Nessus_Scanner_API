@@ -154,6 +154,9 @@ class nessus(object):
 				return
 		except Exception as e:
 			pass
+		finally:
+			#清空获取的任务列表
+			del self.task[:]
 
 	def add(self):
 		#添加扫描任务
@@ -250,6 +253,9 @@ class nessus(object):
 			return self._format[int(rule)]
 		except Exception as e:
 			print e
+		finally:
+			#清空获取的任务列表
+			del self._format[:]
 
 	def report(self):
 		#生成报告
