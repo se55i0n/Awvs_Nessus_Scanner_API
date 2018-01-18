@@ -254,7 +254,7 @@ class nessus(object):
 		except Exception as e:
 			print e
 		finally:
-			#清空获取的任务列表
+			#清空获取的文件格式列表
 			del self._format[:]
 
 	def report(self):
