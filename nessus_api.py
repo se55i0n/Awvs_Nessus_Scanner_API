@@ -267,16 +267,16 @@ class nessus(object):
 				if r.status_code == 200:
 					print self.G+'[-] 报告生成中...'+self.W
 					file_id = json.loads(r.text)['file']
-					time.sleep(5)
-					rs = self.request(method='GET', path='/scans/{}/export/{}/download'.format(
-						scan_id, file_id))
-					if rs.status_code == 200:
-						print self.G+'[-] OK, 生成报告成功...'+self.W
-						filename = re.findall(r'attachment; filename="(.*?)"',str(rs.headers))[0]
-						with open(filename,'wb') as f:
-							f.write(rs.content)
-					else:
-						print self.R+'[-] Ops, 报告还未生成中...'+self.W
+					while True:
+						time.sleep(5)
+						rs = self.request(method='GET', path='/scans/{}/export/{}/download'.format(
+							scan_id, file_id))
+						if rs.status_code == 200:
+							print self.G+'[-] OK, 生成报告成功...'+self.W
+							filename = re.findall(r'attachment; filename="(.*?)"',str(rs.headers))[0]
+							with open(filename,'wb') as f:
+								f.write(rs.content)
+							break
 				elif rs.status_code == 404:
 					print self.R+'[-] 扫描任务不存在...'+self.W
 		except Exception as e:
