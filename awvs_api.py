@@ -164,13 +164,14 @@ class awvs(object):
 			#等待报告生成
 			while True:
 				time.sleep(5)
-				res = requests.get(url=url+report_id+'.pdf',timeout=10,
-				 	verify=False, headers=self.header)
-				if res.status_code == 200:
-					name = urlparse.urlparse(target).netloc.replace(';','')
-					print self.G+'[-] OK, 报告下载成功.'+self.W
-					with open(name +'.pdf', 'wb') as f:
-						f.write(res.content)
+				_r = self.request('/reports/'+report_id)
+				if json.loads(_r.text)['status'] == 'completed':
+					res = requests.get(url=url+report_id+'.pdf',verify=False,timeout=10)
+					if res.status_code == 200:
+						name = urlparse.urlparse(target).netloc.replace(';','')
+						print self.G+'[-] OK, 报告下载成功.'+self.W
+						with open(name +'.pdf', 'wb') as f:
+							f.write(res.content)
 					break
 		except Exception as e:
 			print e
