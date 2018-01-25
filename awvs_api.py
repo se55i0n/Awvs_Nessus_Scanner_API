@@ -172,7 +172,7 @@ class awvs(object):
 						print self.G+'[-] OK, 报告下载成功.'+self.W
 						with open(name +'.pdf', 'wb') as f:
 							f.write(res.content)
-					break
+						break
 		except Exception as e:
 			print e
 
