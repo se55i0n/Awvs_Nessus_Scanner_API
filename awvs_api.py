@@ -162,16 +162,16 @@ class awvs(object):
 			url = self.server.replace('/api/v1','')+'/reports/download/'
 			print self.G+'[-] 报告生成中...'+self.W
 			#等待报告生成
-			time.sleep(10)
-			res = requests.get(url=url+report_id+'.pdf',timeout=10,
-			 	verify=False, headers=self.header)
-			if res.status_code == 200:
-				name = urlparse.urlparse(target).netloc.replace(';','')
-				print self.G+'[-] OK, 报告下载成功.'+self.W
-				with open(name +'.pdf', 'wb') as f:
-					f.write(res.content)
-			else:
-				print self.R+'[-] Ops, 报告生成超时...'+self.W
+			while True:
+				time.sleep(5)
+				res = requests.get(url=url+report_id+'.pdf',timeout=10,
+				 	verify=False, headers=self.header)
+				if res.status_code == 200:
+					name = urlparse.urlparse(target).netloc.replace(';','')
+					print self.G+'[-] OK, 报告下载成功.'+self.W
+					with open(name +'.pdf', 'wb') as f:
+						f.write(res.content)
+					break
 		except Exception as e:
 			print e
 
